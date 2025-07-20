@@ -51,7 +51,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('images/website-background.jpg') no-repeat center center/cover;
+			background: url('images/website-background.jpg') no-repeat center center/cover;
             filter: blur(5px); /* Apply blur effect */
             transform: scale(1.05); /* Slight scale to hide blur edges */
             z-index: 0;
@@ -321,22 +321,6 @@
             flex-shrink: 0;
         }
 
-        .testimonial p {
-            font-style: italic;
-            margin: 0;
-            font-size: 1.05em;
-            color: var(--dark-text);
-            text-align: left;
-        }
-
-        .testimonial strong {
-            display: block;
-            margin-top: 10px;
-            font-size: 1em;
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-
         footer {
             text-align: center;
             padding: 40px;
@@ -344,7 +328,35 @@
             color: var(--light-gray);
             font-size: 0.95em;
             line-height: 1.6em;
+            padding-top: 60px; /* Increased padding for new messages */
         }
+
+        /* New Footer Message Styles */
+        .footer-message-thanks {
+            font-family: 'Playfair Display', serif; /* Use a more elegant font */
+            font-size: 1.8em; /* Larger for impact */
+            color: var(--accent-color); /* Highlight color */
+            margin-bottom: 15px; /* Space below the message */
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); /* Subtle text shadow */
+        }
+
+        .footer-message-forward {
+            font-size: 1.2em; /* Slightly larger than standard footer text */
+            color: var(--light-gray); /* Light color for readability on dark background */
+            margin-bottom: 30px; /* More space before copyright */
+            font-weight: 300;
+        }
+
+/* New style for the developer text */
+.footer-developer {
+    display: inline-block; /* Allows setting padding/margin and background color while keeping it inline with other text */
+    background-color: #333; /* Example background color - choose your desired color */
+    color: #fff; /* Example text color for contrast */
+    padding: 2px 8px; /* Add some padding around the text */
+    border-radius: 4px; /* Slightly rounded corners */
+    margin-right: 5px; /* Space between developer text and copyright symbol */
+}
 
         .contact-info {
             font-size: 1.15em;
@@ -398,6 +410,61 @@
             transform: translateY(-2px);
         }
 
+        /* --- Fullscreen Image Modal Styles --- */
+        .image-modal {
+            display: none; /* Hidden by default - THIS IS THE FIX */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+            justify-content: center; /* These properties will be applied when JS sets display to flex */
+            align-items: center; /* These properties will be applied when JS sets display to flex */
+            backdrop-filter: blur(8px); /* Subtle blur for background */
+            animation: fadeInModal 0.3s ease-out;
+        }
+
+        .image-modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain; /* Ensure the image fits within the modal */
+            transform: scale(0.7); /* Start smaller for zoom effect */
+            opacity: 0; /* Start invisible for fade-in */
+            animation: zoomIn 0.3s forwards cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bounce effect */
+        }
+
+        .modal-caption {
+            margin-top: 20px;
+            color: var(--white);
+            font-size: 1.5em;
+            text-align: center;
+            max-width: 80%;
+            word-wrap: break-word; /* Ensure long titles wrap */
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: var(--white);
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -430,6 +497,56 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* Prevents scrolling when modal is open */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* Swariya Seth Photo Frame */
+        .swariya-photo {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            text-align: center; /* For caption */
+        }
+
+        .swariya-photo img {
+            width: 200px; /* Adjust size as needed */
+            height: 200px; /* Adjust size as needed */
+            object-fit: cover;
+            border-radius: 50%; /* Makes it round */
+            border: 5px solid var(--accent-color); /* Nice accent border */
+            box-shadow: 0 10px 25px var(--shadow-medium); /* Deeper shadow */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .swariya-photo img:hover {
+            transform: scale(1.05) rotate(2deg); /* Subtle hover effect */
+        }
+
+        .swariya-photo .caption {
+            margin-top: 15px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            color: var(--primary-color);
+            font-weight: 700;
         }
 
         /* Responsive adjustments */
@@ -469,6 +586,26 @@
             .testimonial img {
                 margin-bottom: 15px;
             }
+            .image-modal-content {
+                max-width: 95%;
+                max-height: 80%;
+            }
+            .modal-caption {
+                font-size: 1.2em;
+            }
+            .swariya-photo img {
+                width: 150px;
+                height: 150px;
+            }
+            .swariya-photo .caption {
+                font-size: 1.4em;
+            }
+            .footer-message-thanks {
+                font-size: 1.5em;
+            }
+            .footer-message-forward {
+                font-size: 1em;
+            }
         }
 
         @media (max-width: 480px) {
@@ -493,7 +630,89 @@
             .slick-slide img {
                 height: 200px; /* Further adjust height for very small screens */
             }
+            .modal-caption {
+                font-size: 1em;
+            }
+            .close-modal {
+                font-size: 30px;
+                top: 15px;
+                right: 20px;
+            }
+            .swariya-photo img {
+                width: 120px;
+                height: 120px;
+            }
+            .swariya-photo .caption {
+                font-size: 1.2em;
+            }
+            .footer-message-thanks {
+                font-size: 1.3em;
+            }
+            .footer-message-forward {
+                font-size: 0.9em;
+            }
         }
+		
+		/* Update the footer padding to accommodate the new photo */
+footer {
+    text-align: center;
+    padding: 60px 40px 40px 40px; /* Increased top padding */
+    background-color: var(--primary-color);
+    color: var(--light-gray);
+    font-size: 0.95em;
+    line-height: 1.6em;
+}
+
+/* New Styles for the Footer Family Photo */
+.footer-family-photo {
+    margin-bottom: 30px; /* Space between photo and messages */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-family-photo img {
+    width: 150px; /* Reverted to previous width */
+    height: 150px; /* Reverted to previous height */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    border-radius: 12px; /* Creates rounded corners instead of a circle */
+    border: 4px solid var(--accent-color); /* A nice border in your accent color */
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.1), 0 8px 15px rgba(0, 0, 0, 0.3); /* Subtle outer glow and shadow */
+    transition: transform 0.3s ease-in-out;
+}
+
+.footer-family-photo img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.footer-family-photo .caption {
+    margin-top: 15px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4em;
+    color: var(--white); /* White color for contrast */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+@media (max-width: 768px) {
+    .footer-family-photo img {
+        width: 120px; /* Reverted for medium screens */
+        height: 130px;
+    }
+    .footer-family-photo .caption {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-family-photo img {
+        width: 100px; /* Reverted for small screens */
+        height: 100px;
+    }
+    .footer-family-photo .caption {
+        font-size: 1em;
+    }
+}
     </style>
 </head>
 <body>
@@ -530,67 +749,104 @@
                 <li>Renovation and Structural Strengthening</li>
             </ul>
         </div>
+		
+		<div class="section">
+    <h3>We serve to following domains</h3>
+    <ul>
+        <li>
+            <strong>Commercial Architects:</strong> We design innovative and functional commercial spaces, from modern office buildings to bustling retail centers, focusing on aesthetics, efficiency, and compliance with all regulations.
+        </li>
+        <li>
+            <strong>Civil Contractors:</strong> Our expertise covers a wide range of civil works, including infrastructure development, earthwork, and site preparation, ensuring a strong foundation for any project.
+        </li>
+        <li>
+            <strong>Building Contractors:</strong> We manage and execute construction projects from groundbreaking to completion, delivering high-quality residential, commercial, and industrial structures on time and within budget.
+        </li>
+        <li>
+            <strong>Vastu Consultants:</strong> Integrate ancient Vastu principles into your designs for harmonious and positive living or working environments, promoting well-being and prosperity.
+        </li>
+        <li>
+            <strong>Home Builders:</strong> We specialize in crafting bespoke homes, from custom designs to multi-unit residential complexes, ensuring every detail reflects your vision and comfort.
+        </li>
+        <li>
+            <strong>Commercial Builders:</strong> Our team constructs robust and state-of-the-art commercial properties, including retail outlets, corporate offices, and hospitality venues, built to exact specifications.
+        </li>
+        <li>
+            <strong>Building Architects:</strong> We provide comprehensive architectural services, transforming concepts into detailed designs that are both visually appealing and structurally sound.
+        </li>
+        <li>
+            <strong>Civil Engineering Consultants:</strong> Offering expert advice and solutions for complex civil engineering challenges, including structural analysis, site development, and project feasibility studies.
+        </li>
+        <li>
+            <strong>Construction Consultants:</strong> Guiding you through every phase of construction with strategic planning, risk management, cost control, and quality assurance to ensure project success.
+        </li>
+        <li>
+            <strong>Structural Engineering Consultants:</strong> Specializing in the design and analysis of structural integrity for buildings and other constructions, ensuring safety, durability, and compliance with engineering standards.
+        </li>
+    </ul>
+</div>
         
         <div class="section">
             <h3>Why Choose Us</h3>
             <ul>
-                <li>**Over 15 years of industry experience** and a proven track record in **Indore and across Madhya Pradesh**.</li>
-                <li>**Expertise in handling challenging projects**, delivering innovative solutions for complex construction demands.</li>
-                <li>Timely project delivery and transparent communication at every stage.</li>
-                <li>Utilization of quality materials and advanced construction technology.</li>
-                <li>Team of certified engineers and highly skilled labor force.</li>
-                <li>Unwavering commitment to client satisfaction as our top priority.</li>
+                <li><strong>Over 15 years of industry experience</strong> and a proven track record in **Indore and across Madhya Pradesh**.</li>
+                <li><strong>Expertise in handling challenging projects</strong>, delivering innovative solutions for complex construction demands.</li>
+                <li><strong>Timely project delivery</strong> and transparent communication at every stage.</li>
+                <li>Utilization of <strong>quality materials</strong> and advanced construction technology.</li>
+                <li>Team of certified engineers and <strong>highly skilled labor</strong> force.</li>
+                <li>Unwavering <strong>commitment to client satisfaction</strong> as our top priority.</li>
             </ul>
         </div>
 
-   <div class="section">
+    <div class="section">
     <h3>Project Highlights</h3>
     <div id="projectSlider" class="mt-4 mb-5">
-        <img src="images/image1.jpg" alt="Vrindavan Residential Complex, Indore" data-title="Vrindavan Residential Complex, Indore" data-location="Indore">
-        <img src="images/image2.jpg" alt="Shanti Commercial Tower, Betma" data-title="Shanti Commercial Tower, Betma" data-location="Bhopal">
-        <img src="images/image3.jpg" alt="Durga Industrial Park Phase 2, Indore" data-title="Durga Industrial Park Phase 2, Indore" data-location="Jabalpur">
-        <img src="images/image4.jpg" alt="Sai Heights Residential Building, Dhar" data-title="Sai Heights Residential Building, Dhar" data-location="Gwalior">
-        <img src="images/image5.jpg" alt="Shiv Shakti Logistics Hub, Devas Naka" data-title="Shiv Shakti Logistics Hub, Devas Naka" data-location="Ujjain">
-        <img src="images/image6.jpg" alt="Krishna Kunj Villas, Ujjain" data-title="Krishna Kunj Villas, Ujjain" data-location="Sagar">
-        <img src="images/image7.jpg" alt="Mahalaxmi Business Centre, Ujjain" data-title="Mahalaxmi Business Centre, Ujjain" data-location="Rewa">
-        <img src="images/image8.jpg" alt="Hanuman Nagar Township, Indore" data-title="Hanuman Nagar Township, Indore" data-location="Satna">
-        <img src="images/image9.jpg" alt="Ganesh Plaza Shopping Arcade, Indore" data-title="Ganesh Plaza Shopping Arcade, Indore" data-location="Katni">
-        <img src="images/image10.jpg" alt="Amritpuri Residential Layout, Dhar" data-title="Amritpuri Residential Layout, Dhar" data-location="Burhanpur">
-        <img src="images/image11.jpg" alt="Jyoti Kiran Factory Expansion, Betma" data-title="Jyoti Kiran Factory Expansion, Betma" data-location="Singrauli">
-        <img src="images/image12.jpg" alt="Narmada Residency Apartments, Betma" data-title="Narmada Residency Apartments, Betma" data-location="Khandwa">
-        <img src="images/image13.jpg" alt="Chambal Valley Research Centre, Indore" data-title="Chambal Valley Research Centre, Indore" data-location="Morena">
-        <img src="images/image14.jpg" alt="Malwa Tech Park Building C, Indore" data-title="Malwa Tech Park Building C, Indore" data-location="Dewas">
-        <img src="images/image15.jpg" alt="Vindhya Hills Eco Resort, Betma" data-title="Vindhya Hills Eco Resort, Betma" data-location="Chhatarpur">
-        <img src="images/image16.jpg" alt="Gomti Enclave Residential Project, Pithampur" data-title="Gomti Enclave Residential Project, Pithampur" data-location="Vidisha">
-        <img src="images/image17.jpg" alt="Kshipra Riverfront Development, Pithampur" data-title="Kshipra Riverfront Development, Pithampur" data-location="Ujjain">
-        <img src="images/image18.jpg" alt="Panchvati Group Housing, Dhar" data-title="Panchvati Group Housing, Dhar" data-location="Hoshangabad">
-        <img src="images/image19.jpg" alt="Anjana Industrial Warehouse, Indore" data-title="Anjana Industrial Warehouse, Indore" data-location="Sehore">
-        <img src="images/image20.jpg" alt="Sarayu Township Villas, Dhar" data-title="Sarayu Township Villas, Dhar" data-location="Chhindwara">
-        <img src="images/image21.jpg" alt="Tapti Commercial Complex, Betma" data-title="Tapti Commercial Complex, Betma" data-location="Burhanpur">
+        <img src="images/image1.jpg" alt="Vrindavan Residential Complex, Indore" data-title="Vrindavan Residential Complex" data-location="Indore">
+        <img src="images/image2.jpg" alt="Shanti Commercial Tower, Betma" data-title="Shanti Commercial Tower" data-location="Bhopal">
+        <img src="images/image3.jpg" alt="Durga Industrial Park Phase 2, Indore" data-title="Durga Industrial Park Phase 2" data-location="Jabalpur">
+        <img src="images/image4.jpg" alt="Sai Heights Residential Building, Dhar" data-title="Sai Heights Residential Building" data-location="Gwalior">
+        <img src="images/image5.jpg" alt="Shiv Shakti Logistics Hub, Devas Naka" data-title="Shiv Shakti Logistics Hub" data-location="Ujjain">
+        <img src="images/image6.jpg" alt="Krishna Kunj Villas, Ujjain" data-title="Krishna Kunj Villas" data-location="Sagar">
+        <img src="images/image7.jpg" alt="Mahalaxmi Business Centre, Ujjain" data-title="Mahalaxmi Business Centre" data-location="Rewa">
+        <img src="images/image8.jpg" alt="Hanuman Nagar Township, Indore" data-title="Hanuman Nagar Township" data-location="Satna">
+        <img src="images/image9.jpg" alt="Ganesh Plaza Shopping Arcade, Indore" data-title="Ganesh Plaza Shopping Arcade" data-location="Katni">
+        <img src="images/image10.jpg" alt="Amritpuri Residential Layout, Dhar" data-title="Amritpuri Residential Layout" data-location="Burhanpur">
+        <img src="images/image11.jpg" alt="Jyoti Kiran Factory Expansion, Betma" data-title="Jyoti Kiran Factory Expansion" data-location="Singrauli">
+        <img src="images/image12.jpg" alt="Narmada Residency Apartments, Betma" data-title="Narmada Residency Apartments" data-location="Khandwa">
+        <img src="images/image13.jpg" alt="Chambal Valley Research Centre, Indore" data-title="Chambal Valley Research Centre" data-location="Morena">
+        <img src="images/image14.jpg" alt="Malwa Tech Park Building C, Indore" data-title="Malwa Tech Park Building C" data-location="Dewas">
+        <img src="images/image15.jpg" alt="Vindhya Hills Eco Resort, Betma" data-title="Vindhya Hills Eco Resort" data-location="Chhatarpur">
+        <img src="images/image16.jpg" alt="Gomti Enclave Residential Project, Pithampur" data-title="Gomti Enclave Residential Project" data-location="Vidisha">
+        <img src="images/image17.jpg" alt="Kshipra Riverfront Development, Pithampur" data-title="Kshipra Riverfront Development" data-location="Ujjain">
+        <img src="images/image18.jpg" alt="Panchvati Group Housing, Dhar" data-title="Panchvati Group Housing" data-location="Hoshangabad">
+        <img src="images/image19.jpg" alt="Anjana Industrial Warehouse, Indore" data-title="Anjana Industrial Warehouse" data-location="Sehore">
+        <img src="images/image20.jpg" alt="Sarayu Township Villas, Dhar" data-title="Sarayu Township Villas" data-location="Chhindwara">
+        <img src="images/image21.jpg" alt="Tapti Commercial Complex, Betma" data-title="Tapti Commercial Complex" data-location="Burhanpur">
     </div>
 </div>
 
         <div class="section testimonials">
             <h3>Customer Testimonials</h3>
             <div class="testimonial">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Ramesh Tiwari">
+                <img src="images/giriraj_bhawsar.jpg" alt="Giriraj Bhawsar">
                 <div>
                     <p>"Bhawsar Associates made our dream home a reality. Their attention to detail, transparent process, and unwavering commitment to quality are truly unmatched. A fantastic experience from start to finish!"</p>
-                    <strong>- Ramesh Tiwari, Bhopal</strong>
+                    <strong>- Giriraj Bhawsar, Pachalana Dhar</strong>
                 </div>
             </div>
+            
             <div class="testimonial">
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sunita Mehra">
-                <div>
-                    <p>"We were incredibly impressed with the professionalism and timely delivery of our commercial space. The team went above and beyond to ensure our specifications were met perfectly. Highly recommended!"</p>
-                    <strong>- Sunita Mehra, Indore</strong>
-                </div>
-            </div>
-            <div class="testimonial">
-                <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="Ajay Rathore">
+                <img src="images/nandan_kumar.jpg" alt="Nandan">
                 <div>
                     <p>"Their dedication to excellence reflects in every brick and beam. The quality of work is outstanding, and the team was always responsive and collaborative. We couldn’t be happier with our new facility!"</p>
-                    <strong>- Ajay Rathore, Jabalpur</strong>
+                    <strong>- Nandan, Indore</strong>
+                </div>
+            </div>
+			<div class="testimonial">
+                <img src="images/manoj_kumar.jpg" alt="Manoj Kumar">
+                <div>
+                    <p>"We were incredibly impressed with the professionalism and timely delivery of our commercial space. The team went above and beyond to ensure our specifications were met perfectly. Highly recommended!"</p>
+                    <strong>- Manoj Kumar, Bhilwara</strong>
                 </div>
             </div>
         </div>
@@ -598,24 +854,43 @@
         <div class="section">
             <h3>Get In Touch</h3>
             <div class="contact-info">
-                📞 <strong>Call:</strong> +91 9826663339<br/>
+                📞 <strong>Call Anand Bhawsar:</strong> +91 9826663339<br/>
                 📧 <strong>Email:</strong> bhawsarassociates.indore@gmail.com<br/>
                 📍 <strong>Location:</strong> Indore, Madhya Pradesh, India
             </div>
+         
             <form action="https://formspree.io/f/mnnzjppy" method="POST">
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <input type="text" name="subject" placeholder="Subject (Optional)">
                 <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
                 <button type="submit">Send Inquiry</button>
+                <div id="form-messages" style="text-align: center; margin-top: 20px; font-size: 1em; color: green;"></div>
             </form>
-            <div id="form-messages" style="text-align: center; margin-top: 20px; font-size: 1em; color: green;"></div>
+			<br/><br/>
+			   <div class="swariya-photo">
+                <div>
+                    <img src="images/swariya_seth.jpg" alt="Swariya Seth">
+                    <div class="caption">Swariya Seth</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer>
-        Developed by Pritesh Bhawsar | &copy; 2025 Bhawsar Associates. All Rights Reserved.
-    </footer>
+   <footer>
+    <div class="footer-family-photo">
+        <img src="images/family.jpg" alt="Bhawsar Family Photo">
+    </div>
+    <div class="footer-message-thanks">The Bhawsar Family Extends Our Gratitude for Your Visit to Bhawsar Associates</div>
+    <div class="footer-message-forward">Looking forward to doing business with you!</div>
+    <div class="footer-developer">Developed by Pritesh Bhawsar</div> | &copy; 2025 Bhawsar Associates. All Rights Reserved.
+</footer>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
@@ -663,7 +938,6 @@
             }
         });
 
-        // Initialize Slick Carousel and add project info overlays
         $(document).ready(function(){
             // Add overlay divs to each slide BEFORE initializing Slick
             $('#projectSlider img').each(function() {
@@ -680,16 +954,16 @@
             });
 
             $('#projectSlider').slick({
-                slidesToShow: 3,        // Show 3 images at a time
-                slidesToScroll: 1,      // Scroll 1 image at a time
-                autoplay: true,         // Auto-play the carousel
-                autoplaySpeed: 3000,    // Change slide every 3 seconds
-                dots: false,            // No dots (only next/previous buttons)
-                arrows: true,           // Show navigation arrows (next/previous)
-                infinite: true,         // Loop the carousel
-                speed: 800,             // Animation speed
+                slidesToShow: 3,       // Show 3 images at a time
+                slidesToScroll: 1,     // Scroll 1 image at a time
+                autoplay: true,        // Auto-play the carousel
+                autoplaySpeed: 3000,   // Change slide every 3 seconds
+                dots: false,           // No dots (only next/previous buttons)
+                arrows: true,          // Show navigation arrows (next/previous)
+                infinite: true,        // Loop the carousel
+                speed: 800,            // Animation speed
                 cssEase: 'ease-in-out', // Smoother transition
-                responsive: [           // Make it responsive
+                responsive: [          // Make it responsive
                     {
                         breakpoint: 992, // For screens smaller than 992px
                         settings: {
@@ -716,6 +990,45 @@
                         section.addClass('show');
                     }
                 });
+            });
+
+            // --- Image Modal Logic ---
+            const imageModal = $('#imageModal');
+            const modalImage = $('#modalImage');
+            const modalCaption = $('#modalCaption');
+            const closeModal = $('.close-modal');
+
+            // Open the modal when a project image is clicked
+            $('#projectSlider').on('click', 'img', function() {
+                const imageUrl = $(this).attr('src');
+                const imageAlt = $(this).attr('alt'); // Use alt text for caption
+
+                modalImage.attr('src', imageUrl);
+                modalCaption.text(imageAlt);
+                imageModal.css('display', 'flex'); // Show modal as flex to center content
+                $('body').addClass('modal-open'); // Add class to body to prevent scrolling
+            });
+
+            // Close the modal when the close button is clicked
+            closeModal.on('click', function() {
+                imageModal.css('display', 'none');
+                $('body').removeClass('modal-open');
+            });
+
+            // Close the modal when clicking outside the image
+            imageModal.on('click', function(event) {
+                if ($(event.target).is(imageModal)) {
+                    imageModal.css('display', 'none');
+                    $('body').removeClass('modal-open');
+                }
+            });
+
+            // Close the modal when the ESC key is pressed
+            $(document).on('keydown', function(event) {
+                if (event.key === 'Escape' && imageModal.css('display') === 'flex') {
+                    imageModal.css('display', 'none');
+                    $('body').removeClass('modal-open');
+                }
             });
         });
     </script>
