@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Bhawsar Associates</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9hQ" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <style>
         :root {
             --primary-color: #264653; /* Dark muted blue */
@@ -14,6 +17,9 @@
             --dark-text: #333;
             --light-text: #555;
             --white: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.2);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
         }
 
         * {
@@ -29,60 +35,119 @@
         }
 
         header {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 80px 20px;
-            text-align: center;
-            animation: fadeIn 2s ease-out;
             position: relative;
-            overflow: hidden; /* For potential background patterns/images */
+            height: 500px; /* Fixed height for header */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('images/website-background.jpg') no-repeat center center/cover;
+            filter: blur(5px); /* Apply blur effect */
+            transform: scale(1.05); /* Slight scale to hide blur edges */
+            z-index: 0;
+        }
+
+        .header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(38, 70, 83, 0.7); /* Primary color with transparency */
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2; /* Ensure content is above background and overlay */
+            max-width: 800px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        header .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 25px;
+            animation: pulse 2s infinite ease-in-out;
+            border-radius: 50%;
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3.8em;
+            font-size: 3.5em;
             margin: 0;
             letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px var(--shadow-dark);
+            animation: slideInLeft 1s ease-out forwards;
+            opacity: 0;
+            animation-delay: 0.5s;
         }
 
         header h2 {
             font-weight: 300;
-            margin-top: 15px;
+            margin-top: 10px;
             color: var(--medium-gray);
-            font-size: 1.8em;
+            font-size: 1.6em;
+            animation: slideInLeft 1s ease-out forwards;
+            opacity: 0;
+            animation-delay: 0.8s;
         }
 
         header p {
-            font-size: 1.2em;
+            font-size: 1.1em;
             margin-top: 20px;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
             line-height: 1.6em;
             color: var(--light-gray);
+            animation: fadeIn 1.5s ease-out forwards;
+            opacity: 0;
+            animation-delay: 1.2s;
         }
 
         .container {
-            max-width: 1080px; /* Slightly wider container */
+            max-width: 1080px;
             margin: auto;
-            padding: 60px 25px; /* More padding */
+            padding: 60px 25px;
         }
 
         .section {
-            margin-bottom: 80px; /* Increased spacing between sections */
-            animation: fadeInUp 1.2s ease-out;
+            margin-bottom: 80px;
             background-color: var(--white);
             padding: 0;
             border-radius: 8px;
+            /* Simple fade in for sections on page load/initial scroll */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        /* Class to show sections once loaded */
+        .section.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.8em; /* Larger headings */
+            font-size: 2.8em;
             margin-bottom: 25px;
             color: var(--primary-color);
-            text-align: center; /* Center section headings */
+            text-align: center;
             position: relative;
             padding-bottom: 10px;
         }
@@ -100,29 +165,29 @@
         }
 
         .section p, .section ul {
-            font-size: 1.15em; /* Slightly larger text */
+            font-size: 1.15em;
             line-height: 1.8em;
             color: var(--light-text);
-            max-width: 800px; /* Constrain text width for readability */
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            text-align: justify; /* Justify text for a formal look */
+            text-align: justify;
         }
         
         .section ul {
-            list-style: none; /* Remove default bullet points */
+            list-style: none;
             padding: 0;
             margin-top: 20px;
         }
 
         .section ul li {
             position: relative;
-            padding-left: 30px; /* Space for custom bullet */
+            padding-left: 30px;
             margin-bottom: 10px;
         }
 
         .section ul li::before {
-            content: '✓'; /* Custom checkmark bullet */
+            content: '✓';
             position: absolute;
             left: 0;
             color: var(--accent-color);
@@ -130,43 +195,116 @@
             font-size: 1.2em;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-            gap: 25px; /* Increased gap */
-            margin-top: 40px;
+        /* Slick Carousel Customizations */
+        .slick-track {
+            display: flex !important; /* Ensure items stay in a row */
+            align-items: stretch; /* Make all slides the same height */
         }
 
-        .gallery img {
+        .slick-slide {
+            margin: 0 10px; /* Space between slides */
+            height: auto; /* Allow height to adjust */
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* For overlay positioning */
+            cursor: pointer; /* Indicate interactivity */
+        }
+
+        .slick-slide img {
             width: 100%;
-            height: 250px; /* Slightly taller images */
+            height: 350px; /* Adjusted height for individual slides */
             object-fit: cover;
             border-radius: 10px;
-            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            box-shadow: 0 8px 20px var(--shadow-medium);
+            transition: transform 0.3s ease; /* For hover effect */
         }
 
-        .gallery img:hover {
-            transform: translateY(-8px) scale(1.02); /* Lift and slight scale */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+        .slick-slide img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Overlay for project info */
+        .project-info-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(38, 70, 83, 0.85); /* Dark overlay */
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-align: center;
+            padding: 15px;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease;
+            pointer-events: none; /* Allows clicks to pass through to underlying elements if not for interaction */
+        }
+
+        .slick-slide:hover .project-info-overlay {
+            opacity: 1;
+            pointer-events: auto; /* Enable interaction on hover */
+        }
+
+        .project-info-overlay h5 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6em;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .project-info-overlay p {
+            font-size: 1em;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* Slick dots and arrows styling */
+        /* HIDE THE DOTS */
+        .slick-dots {
+            display: none !important;
+        }
+
+        .slick-prev:before, .slick-next:before {
+            font-size: 30px;
+            color: var(--primary-color) !important;
+        }
+
+        /* Position arrows more centrally on the image */
+        .slick-prev, .slick-next {
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for height of arrow icon */
+            z-index: 10; /* Ensure arrows are above overlay */
+        }
+
+        .slick-prev {
+            left: 10px; /* Adjust as needed */
+        }
+
+        .slick-next {
+            right: 10px; /* Adjust as needed */
         }
 
         .testimonials {
             background-color: var(--light-gray);
-            padding: 50px 30px; /* More padding */
+            padding: 50px 30px;
             border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Soft shadow */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
         .testimonial {
             display: flex;
-            gap: 25px; /* More space */
+            gap: 25px;
             margin-bottom: 40px;
-            align-items: flex-start; /* Align text to top of image */
+            align-items: flex-start;
             background-color: var(--white);
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Lighter shadow for individual testimonials */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease-in-out;
         }
 
@@ -175,20 +313,20 @@
         }
 
         .testimonial img {
-            width: 90px; /* Slightly larger image */
+            width: 90px;
             height: 90px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--accent-color); /* Accent border */
-            flex-shrink: 0; /* Prevent image from shrinking */
+            border: 3px solid var(--accent-color);
+            flex-shrink: 0;
         }
 
         .testimonial p {
             font-style: italic;
             margin: 0;
             font-size: 1.05em;
-            color: var(--dark-text); /* Ensure good contrast */
-            text-align: left; /* Keep testimonial text left-aligned */
+            color: var(--dark-text);
+            text-align: left;
         }
 
         .testimonial strong {
@@ -217,21 +355,21 @@
         }
 
         .contact-info strong {
-            color: var(--primary-color); /* Highlight contact details */
+            color: var(--primary-color);
         }
 
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Increased gap */
-            max-width: 600px; /* Wider form */
-            margin: 30px auto 0 auto; /* Center form */
+            gap: 15px;
+            max-width: 600px;
+            margin: 30px auto 0 auto;
         }
 
         input, textarea {
             font-size: 1.05em;
-            padding: 15px; /* More padding in fields */
-            border-radius: 8px; /* Slightly more rounded corners */
+            padding: 15px;
+            border-radius: 8px;
             border: 1px solid var(--medium-gray);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -239,7 +377,7 @@
         input:focus, textarea:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(233, 196, 106, 0.2); /* Soft focus ring */
+            box-shadow: 0 0 0 3px rgba(233, 196, 106, 0.2);
         }
 
         button {
@@ -256,8 +394,8 @@
         }
 
         button:hover {
-            background-color: #1a3038; /* Slightly darker on hover */
-            transform: translateY(-2px); /* Subtle lift */
+            background-color: #1a3038;
+            transform: translateY(-2px);
         }
 
         /* Animations */
@@ -269,7 +407,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(60px); /* More pronounced lift */
+                transform: translateY(60px);
             }
             to {
                 opacity: 1;
@@ -277,8 +415,31 @@
             }
         }
 
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
+            header {
+                height: 400px;
+            }
+            header .logo {
+                width: 120px;
+            }
             header h1 {
                 font-size: 2.8em;
             }
@@ -291,11 +452,17 @@
             .section h3 {
                 font-size: 2.2em;
             }
-            .gallery {
-                grid-template-columns: 1fr; /* Stack images on small screens */
+            .slick-slide img {
+                height: 280px; /* Adjust height for smaller screens */
+            }
+            .project-info-overlay h5 {
+                font-size: 1.3em;
+            }
+            .project-info-overlay p {
+                font-size: 0.9em;
             }
             .testimonial {
-                flex-direction: column; /* Stack testimonial content */
+                flex-direction: column;
                 align-items: center;
                 text-align: center;
             }
@@ -305,6 +472,12 @@
         }
 
         @media (max-width: 480px) {
+            header {
+                height: 350px;
+            }
+            header .logo {
+                width: 100px;
+            }
             header h1 {
                 font-size: 2.2em;
             }
@@ -317,15 +490,23 @@
             .section p, .section ul, .contact-info {
                 font-size: 1em;
             }
+            .slick-slide img {
+                height: 200px; /* Further adjust height for very small screens */
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Bhawsar Associates</h1>
-        <h2>Anand Bhawsar</h2>
-        <p>Excellence in construction. Foundations of trust, structures of success.</p>
+        <div class="header-background"></div>
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <img src="images/logo.jpg" alt="Bhawsar Associates Logo" class="logo">
+            <h1>Bhawsar Associates</h1>
+            <h2>Anand Bhawsar</h2>
+            <p>Excellence in construction. Foundations of trust, structures of success.</p>
+        </div>
     </header>
 
     <div class="container">
@@ -362,14 +543,32 @@
             </ul>
         </div>
 
-        <div class="section">
-            <h3>Project Highlights</h3>
-            <div class="gallery">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Construction site 1">
-                <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80" alt="Construction site 2">
-                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80" alt="Modern building">
-            </div>
-        </div>
+   <div class="section">
+    <h3>Project Highlights</h3>
+    <div id="projectSlider" class="mt-4 mb-5">
+        <img src="images/image1.jpg" alt="Vrindavan Residential Complex, Indore" data-title="Vrindavan Residential Complex, Indore" data-location="Indore">
+        <img src="images/image2.jpg" alt="Shanti Commercial Tower, Betma" data-title="Shanti Commercial Tower, Betma" data-location="Bhopal">
+        <img src="images/image3.jpg" alt="Durga Industrial Park Phase 2, Indore" data-title="Durga Industrial Park Phase 2, Indore" data-location="Jabalpur">
+        <img src="images/image4.jpg" alt="Sai Heights Residential Building, Dhar" data-title="Sai Heights Residential Building, Dhar" data-location="Gwalior">
+        <img src="images/image5.jpg" alt="Shiv Shakti Logistics Hub, Devas Naka" data-title="Shiv Shakti Logistics Hub, Devas Naka" data-location="Ujjain">
+        <img src="images/image6.jpg" alt="Krishna Kunj Villas, Ujjain" data-title="Krishna Kunj Villas, Ujjain" data-location="Sagar">
+        <img src="images/image7.jpg" alt="Mahalaxmi Business Centre, Ujjain" data-title="Mahalaxmi Business Centre, Ujjain" data-location="Rewa">
+        <img src="images/image8.jpg" alt="Hanuman Nagar Township, Indore" data-title="Hanuman Nagar Township, Indore" data-location="Satna">
+        <img src="images/image9.jpg" alt="Ganesh Plaza Shopping Arcade, Indore" data-title="Ganesh Plaza Shopping Arcade, Indore" data-location="Katni">
+        <img src="images/image10.jpg" alt="Amritpuri Residential Layout, Dhar" data-title="Amritpuri Residential Layout, Dhar" data-location="Burhanpur">
+        <img src="images/image11.jpg" alt="Jyoti Kiran Factory Expansion, Betma" data-title="Jyoti Kiran Factory Expansion, Betma" data-location="Singrauli">
+        <img src="images/image12.jpg" alt="Narmada Residency Apartments, Betma" data-title="Narmada Residency Apartments, Betma" data-location="Khandwa">
+        <img src="images/image13.jpg" alt="Chambal Valley Research Centre, Indore" data-title="Chambal Valley Research Centre, Indore" data-location="Morena">
+        <img src="images/image14.jpg" alt="Malwa Tech Park Building C, Indore" data-title="Malwa Tech Park Building C, Indore" data-location="Dewas">
+        <img src="images/image15.jpg" alt="Vindhya Hills Eco Resort, Betma" data-title="Vindhya Hills Eco Resort, Betma" data-location="Chhatarpur">
+        <img src="images/image16.jpg" alt="Gomti Enclave Residential Project, Pithampur" data-title="Gomti Enclave Residential Project, Pithampur" data-location="Vidisha">
+        <img src="images/image17.jpg" alt="Kshipra Riverfront Development, Pithampur" data-title="Kshipra Riverfront Development, Pithampur" data-location="Ujjain">
+        <img src="images/image18.jpg" alt="Panchvati Group Housing, Dhar" data-title="Panchvati Group Housing, Dhar" data-location="Hoshangabad">
+        <img src="images/image19.jpg" alt="Anjana Industrial Warehouse, Indore" data-title="Anjana Industrial Warehouse, Indore" data-location="Sehore">
+        <img src="images/image20.jpg" alt="Sarayu Township Villas, Dhar" data-title="Sarayu Township Villas, Dhar" data-location="Chhindwara">
+        <img src="images/image21.jpg" alt="Tapti Commercial Complex, Betma" data-title="Tapti Commercial Complex, Betma" data-location="Burhanpur">
+    </div>
+</div>
 
         <div class="section testimonials">
             <h3>Customer Testimonials</h3>
@@ -403,13 +602,14 @@
                 📧 <strong>Email:</strong> bhawsarassociates.indore@gmail.com<br/>
                 📍 <strong>Location:</strong> Indore, Madhya Pradesh, India
             </div>
-            <form action="mailto:bhawsarassociates.indore@gmail.com" method="post" enctype="text/plain">
+            <form action="https://formspree.io/f/mnnzjppy" method="POST">
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <input type="text" name="subject" placeholder="Subject (Optional)">
                 <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
                 <button type="submit">Send Inquiry</button>
             </form>
+            <div id="form-messages" style="text-align: center; margin-top: 20px; font-size: 1em; color: green;"></div>
         </div>
     </div>
 
@@ -417,5 +617,107 @@
         Developed by Pritesh Bhawsar | &copy; 2025 Bhawsar Associates. All Rights Reserved.
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlrZmiGfBts/oW0H/V7S1F4F" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+    <script>
+        // JavaScript for AJAX form submission to Formspree
+        document.querySelector('form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the browser's default form submission
+
+            const form = event.target;
+            const messagesDiv = document.getElementById('form-messages');
+
+            messagesDiv.textContent = 'Sending your message...';
+            messagesDiv.style.color = '#264653'; // Primary color for "sending" status
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json' // Request JSON response from Formspree
+                    }
+                });
+
+                if (response.ok) {
+                    // Formspree sends a JSON success message on AJAX submission
+                    const data = await response.json(); // Parse the JSON response
+                    messagesDiv.textContent = data.message || 'Your inquiry has been sent successfully! We will get back to you soon.';
+                    messagesDiv.style.color = 'green';
+                    form.reset(); // Clear the form fields after successful submission
+                } else {
+                    // Handle errors returned by Formspree
+                    const errorData = await response.json(); // Parse the error JSON
+                    // Formspree errors often come in 'errors' array
+                    const errorMessage = errorData.errors ? errorData.errors.map(err => err.message).join(', ') : 'Failed to send message. Please try again.';
+                    throw new Error(errorMessage);
+                }
+            } catch (error) {
+                // Catch network errors or errors thrown from the response handling
+                messagesDiv.textContent = 'Error: ' + error.message;
+                messagesDiv.style.color = 'red';
+                console.error('Form submission error:', error);
+            }
+        });
+
+        // Initialize Slick Carousel and add project info overlays
+        $(document).ready(function(){
+            // Add overlay divs to each slide BEFORE initializing Slick
+            $('#projectSlider img').each(function() {
+                const title = $(this).data('title');
+                const location = $(this).data('location');
+                const overlay = `
+                    <div class="project-info-overlay">
+                        <h5>${title}</h5>
+                        <p>${location}</p>
+                    </div>
+                `;
+                $(this).wrap('<div class="slick-item-wrapper"></div>'); // Wrapper for easier styling/JS targeting
+                $(this).after(overlay);
+            });
+
+            $('#projectSlider').slick({
+                slidesToShow: 3,        // Show 3 images at a time
+                slidesToScroll: 1,      // Scroll 1 image at a time
+                autoplay: true,         // Auto-play the carousel
+                autoplaySpeed: 3000,    // Change slide every 3 seconds
+                dots: false,            // No dots (only next/previous buttons)
+                arrows: true,           // Show navigation arrows (next/previous)
+                infinite: true,         // Loop the carousel
+                speed: 800,             // Animation speed
+                cssEase: 'ease-in-out', // Smoother transition
+                responsive: [           // Make it responsive
+                    {
+                        breakpoint: 992, // For screens smaller than 992px
+                        settings: {
+                            slidesToShow: 2, // Show 2 images
+                            slidesToScroll: 1
+                        }
+                    },
+                    {
+                        breakpoint: 768, // For screens smaller than 768px
+                        settings: {
+                            slidesToShow: 1, // Show 1 image
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+
+            // Basic scroll-in animation for sections
+            $(window).on('load scroll', function() {
+                $('.section').each(function() {
+                    var section = $(this);
+                    // Animate in if section is sufficiently in viewport
+                    if (section.offset().top < $(window).height() + $(window).scrollTop() - 150 && !section.hasClass('show')) {
+                        section.addClass('show');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
