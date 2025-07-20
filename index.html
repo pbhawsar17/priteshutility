@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+	
+	
 	<style>
         :root {
             --primary-color: #264653; /* Dark muted blue */
@@ -548,6 +550,10 @@
             color: var(--primary-color);
             font-weight: 700;
         }
+		
+		
+		
+		
 
         /* Responsive adjustments */
         @media (max-width: 768px) {
@@ -713,20 +719,142 @@ footer {
         font-size: 1em;
     }
 }
+/* Sticky Navbar with Scroll Animation */
+  .sticky-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #343a40;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-100%);
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .sticky-navbar.show {
+    transform: translateY(0);
+  }
+
+  .sticky-logo {
+    height: 40px;
+    width: auto;
+    border-radius: 50%;
+    margin-right: 15px;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  }
+
+  .sticky-title {
+    font-size: 1.4em;
+    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+  }
+
+  .main-header {
+    padding-top: 60px;
+  }
+  
+  
+  
+  /* Loading Bar Animation */
+  #loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(to right, #00c9ff, #92fe9d);
+    z-index: 2000;
+    animation: loadingBar 2s ease-out forwards;
+  }
+
+  @keyframes loadingBar {
+    0% { width: 0%; }
+    50% { width: 60%; }
+    100% { width: 100%; }
+  }
+  
+  /* Thank You Popup */
+  #thankYouPopup {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fffae6;
+    color: #222;
+    padding: 18px 28px;
+    border-left: 6px solid #ffc107;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 3000;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+   /* Marquee Footer */
+  .footer-marquee {
+    position: relative;
+    background: linear-gradient(90deg, #00c9ff, #92fe9d);
+    color: #000;
+    font-weight: 600;
+    padding: 10px 0;
+    font-size: 1rem;
+    overflow: hidden;
+  }
+
+  .footer-marquee span {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 25s linear infinite;
+    padding-left: 100%;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-background"></div>
-        <div class="header-overlay"></div>
-        <div class="header-content">
-            <img src="images/logo.jpg" alt="Bhawsar Associates Logo" class="logo">
-            <h1>Bhawsar Associates</h1>
-            <h2>Anand Bhawsar</h2>
-            <p>Excellence in construction. Foundations of trust, structures of success.</p>
-        </div>
-    </header>
+<div id="loading-bar"></div>
+
+<header class="main-header">
+    <div class="sticky-navbar">
+        <img src="images/logo.jpg" alt="Logo" class="sticky-logo">
+        <span class="sticky-title">Bhawsar Associates</span>
+    </div>
+
+    <div class="header-background"></div>
+    <div class="header-overlay"></div>
+    <div class="header-content">
+        <img src="images/logo.jpg" alt="Bhawsar Associates Logo" class="logo">
+        <h1>Bhawsar Associates</h1>
+        <h2>Anand Bhawsar</h2>
+		<h2>Welcome to Bhawsar Associates</h2>	
+		<p>Builders & Construction Company with a legacy of trust<br/>
+        Excellence in construction. Foundations of trust, structures of success.</p>
+    </div>
+</header>
+
+
+<div class="footer-marquee">
+  <span>✨ Building Dreams Buidling Homes 🏠 | 🏗️ Bhawsar Associates – Your Trusted Construction Partner | 📞 Contact Us Anytime at +91 9826663339 – We’re Just a Brick Away! 🧱</span>
+</div>
 
     <div class="container">
         <div class="section">
@@ -866,14 +994,14 @@ footer {
                 <button type="submit">Send Inquiry</button>
                 <div id="form-messages" style="text-align: center; margin-top: 20px; font-size: 1em; color: green;"></div>
             </form>
-			<br/><br/>
+		</div>
+		<br/><br/>
 			   <div class="swariya-photo">
                 <div>
                     <img src="images/swariya_seth.jpg" alt="Swariya Seth">
                     <div class="caption">🙏🙏 Jai Swariya Seth 🙏🙏</div>
                 </div>
             </div>
-        </div>
     </div>
 
    <footer>
@@ -883,6 +1011,8 @@ footer {
     <div class="footer-message-thanks">The Bhawsar Family Extends Our Gratitude for Your Visit to Bhawsar Associates</div>
     <div class="footer-message-forward">Looking forward to doing business with you!</div>
     <div class="footer-developer">Developed by Pritesh Bhawsar</div> | &copy; 2025 Bhawsar Associates. All Rights Reserved.
+	
+	<div id="thankYouPopup">🌟 Thank you for visiting Bhawsar Associates! 🌟<br>We're honored to have you here. 🙏<br>Have a wonderful day! 😊</div>
 </footer>
 
     <div id="imageModal" class="image-modal">
@@ -1046,6 +1176,35 @@ document.addEventListener("DOMContentLoaded", function () {
     slider.innerHTML = "";
     images.forEach(img => slider.appendChild(img));
 });
+</script>
+<script>
+   window.addEventListener('scroll', function () {
+    const stickyNav = document.querySelector('.sticky-navbar');
+    if (window.scrollY > 100) {
+      stickyNav.classList.add('show');
+    } else {
+      stickyNav.classList.remove('show');
+    }
+
+    // Show popup when reaching bottom
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      const popup = document.getElementById('thankYouPopup');
+      if (popup.style.display !== 'block') {
+        popup.style.display = 'block';
+        setTimeout(() => {
+          popup.style.display = 'none';
+        }, 7000);
+      }
+    }
+  });
+  
+
+  // Remove loading bar after animation ends
+  window.addEventListener('load', function () {
+    setTimeout(() => {
+      document.getElementById('loading-bar').style.display = 'none';
+    }, 2200);
+  });
 </script>
 </body>
 </html>
