@@ -1032,5 +1032,22 @@ footer {
             });
         });
     </script>
+	<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.getElementById("projectSlider");
+    const images = Array.from(slider.getElementsByTagName("img"));
+
+    // Fisher-Yates Shuffle
+    for (let i = images.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [images[i], images[j]] = [images[j], images[i]];
+    }
+
+    // Clear and re-append in shuffled order
+    slider.innerHTML = "";
+    images.forEach(img => slider.appendChild(img));
+});
+</script>
+
 </body>
 </html>
