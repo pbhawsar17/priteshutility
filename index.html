@@ -478,18 +478,31 @@ html, body {
         if (file) reader.readAsArrayBuffer(file);
 		  
       }
+		 // Add this inside your controller, after defining $scope.selectedCategory
+		$scope.updateItemCount = function () {
+		  let data = $scope.fullData;
+		  if ($scope.selectedCategory) {
+			data = data.filter(item => (item.category || "").trim() === $scope.selectedCategory.trim());
+		  }
+		  document.getElementById("itemCount").innerText = `✅ Vocabulary loaded: ${data.length}`;
+		};
+
+		// Watch for category changes
+		$scope.$watch('selectedCategory', function (newVal, oldVal) {
+		  if (newVal !== oldVal) {
+			$scope.updateItemCount();
+		  }
+		});																	 
 
       $scope.loadVocabulary = function () {
 		 $scope.loadingCount = true;
+				 // Update the count whenever loading
+		$scope.updateItemCount();
 		 
         let data = $scope.fullData;
         if ($scope.selectedCategory) {
           data = data.filter(item => (item.category || "").trim() === $scope.selectedCategory.trim());
         }
-		
-		
-		document.getElementById("itemCount").innerText = `✅ Loaded Items: ${data.length}`;
-		
 		
         const remaining = data.filter(item => !$scope.usedWords.includes(item.word));
         if (remaining.length === 0) {
