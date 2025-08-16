@@ -113,9 +113,8 @@ html, body {
       box-shadow: none !important;
       opacity: 0.7;
     }
-
-    .learning-table-container { max-height: 500px; overflow-y: auto; }
-
+.learning-table-container { max-height: 500px; overflow-y: auto; }
+   
     .toggle-container {
       display: flex;
       align-items: center;
@@ -199,6 +198,14 @@ html, body {
       white-space: pre-line;   /* show \n line breaks */
       z-index: 9999;           /* ensure on top */
     }
+	
+	#itemCount {
+  font-size: 14px;
+  background: #dff9fb;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
   </style>
 </head>
 
@@ -215,8 +222,7 @@ html, body {
 
   <!-- Status Bar -->
   <div id="statusBar"></div>
-	<br/><br/><br/>
-
+<br/><br/><br/>
   <!-- App -->
   <div id="appContainer" class="container">
 
@@ -239,6 +245,7 @@ html, body {
     <!-- File Selector (left aligned) -->
     <div style="margin-top:15px; text-align:left;">
       <input type="file" id="excelFile" />
+	   <br/><p  ng-show="loadingCount" id="itemCount" style="margin-top:8px; color:#130f40; font-weight:600;"></p>
     </div>
 
     <!-- Category Select + Load Button -->
@@ -315,26 +322,25 @@ html, body {
     </div>
 
     <!-- Learning Mode -->
-    <div class="learning-table-container" ng-show="learningMode">
-      <h3>📖 Full Vocabulary List</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Word</th>
-            <th>Meaning</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in filteredLearningData()">
-            <td>{{ item.word }}</td>
-            <td style="text-align:left;">{{ item.word_meaning }}</td>
-            <td>{{ item.category }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
+<div class="learning-table-container" ng-show="learningMode">
+  <h3>📖 Full Vocabulary List</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Word</th>
+        <th>Meaning</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in filteredLearningData()">
+        <td>{{ item.word }}</td>
+        <td style="text-align:left;">{{ item.word_meaning }}</td>
+        <td>{{ item.category }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
   </div>
 
   <!-- Login Script -->
@@ -443,7 +449,8 @@ html, body {
       $scope.quizRoundsCompleted = 0;
       $scope.finalReportVisible = false;
       $scope.learningMode = false;
-
+	$scope.loadingCount = false;
+	
       document.getElementById("excelFile").addEventListener("change", handleFile, false);
 
       function handleFile(e) {
@@ -469,14 +476,21 @@ html, body {
         };
 
         if (file) reader.readAsArrayBuffer(file);
+		  
       }
 
       $scope.loadVocabulary = function () {
+		 $scope.loadingCount = true;
+		 
         let data = $scope.fullData;
         if ($scope.selectedCategory) {
           data = data.filter(item => (item.category || "").trim() === $scope.selectedCategory.trim());
         }
-
+		
+		
+		document.getElementById("itemCount").innerText = `✅ Loaded Items: ${data.length}`;
+		
+		
         const remaining = data.filter(item => !$scope.usedWords.includes(item.word));
         if (remaining.length === 0) {
           $scope.finalReportVisible = true;
