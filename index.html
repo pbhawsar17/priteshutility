@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html ng-app="vocabApp">
+<head>
+  <meta charset="utf-8">
+  <title>Vocabulary Match Game</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-sanitize.js"></script>
+
+
+  <style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+body.scrollable {
+  overflow-y: auto;
+}
+
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+    h2 {
+      color: #2e86de;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      background: #dff9fb;
+      border-radius: 8px;
+      border: 1px solid #7ed6df;
+    }
+
+    select, button {
+      padding: 8px 14px;
+      margin: 5px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    select {
+      background-color: #f9ca24;
+      color: #2f3542;
+    }
+
+    button {
+      background-color: #6ab04c;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #44bd32;
+    }
+
+    table {
+      width: 850px;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #ffffff;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th {
+      background-color: #40739e;
+      color: white;
+      padding: 12px;
+    }
+
+    td {
+      text-align: center;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    select.ng-pristine {
+      background-color: #f5f6fa;
+    }
+	
+	td:first-child {
+  text-align: left;
+  padding-left: 20px;
+}
+
+
+    td:nth-child(3) {
+      font-weight: bold;
+	  width: 160px;
+  white-space: normal;
+    }
+	
+	
+
+    td:contains("Correct!") {
+      color: green;
+    }
+
+    td:contains("Incorrect!") {
+      color: red;
+    }
+
+    td:contains("I don't know"), td:contains("It's okay!") {
+      color: #e67e22;
+    }
+
+    .score-box, .final-report {
+      background-color: #f1f2f6;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      width: 600px;
+      text-align: left;
+    }
+
+    .final-report h3 {
+      color: #130f40;
+    }
+
+    .score-box p, .final-report p {
+      margin: 8px 0;
+    }
+
+	button:disabled,
+	button[disabled] {
+	  background-color: #ccc !important;
+	  color: #666 !important;
+	  cursor: not-allowed !important;
+	  box-shadow: none !important;
+	  opacity: 0.7;
+	}
+
+.learning-table-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.toggle-container {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-top: 10px;
+}
+
+/* Switch base */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider track */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+/* Toggle knob */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* When checked */
+.switch input:checked + .slider {
+  background-color: #6ab04c;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+  
+  
+  /* 🔹 Login card */
+.login-box {
+  background: linear-gradient(145deg, #ffffff, #f5f6fa);
+  padding: 35px 30px;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.15);
+  text-align: center;
+  width: 380px;
+  max-width: 90%;
+  transition: all 0.3s ease;
+   z-index: 10;
+}
+
+.login-box h2 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  color: #2f3640;
+}
+
+.login-box input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: 0.2s;
+  box-sizing: border-box;
+}
+
+.login-box input:focus {
+  border-color: #6ab04c;
+  box-shadow: 0 0 6px rgba(106, 176, 76, 0.4);
+}
+
+.login-box button {
+  background: linear-gradient(135deg, #6ab04c, #44bd32);
+  border: none;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.login-box button:hover {
+  background: linear-gradient(135deg, #44bd32, #6ab04c);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+
+    #appContainer {
+      display: none; /* Hide app until login */
+    }
+
+    /* Keep your existing styles for the app */
+    body.scrollable { overflow-y: auto; }
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(8px);
+      background-color: rgba(255, 255, 255, 0.2);
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    h2 { color: #2e86de; }
+    /* (keeping your app’s full CSS from earlier, skipped here for brevity) */
+
+#loginBox {
+  display: block;
+}
+#appContainer {
+  display: none;
+}
+
+ /* 🔝 top-right status bar */
+    #statusBar {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      background: #2a9d8f;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+
+  </style>
+</head>
+
+
+
+<body ng-class="{scrollable: learningMode}" ng-controller="MainController" style="display:flex;justify-content:center;align-items:center;min-height:100vh;">
+
+  <!-- 🔒 Login Page -->
+<div id="loginBox" class="login-box">
+  <h2 style="margin-bottom:8px;">👋 Welcome to Pritesh Vocab App</h2>
+  <p style="margin:0 0 15px; color:#555; font-size:0.95rem;">
+    Please login to continue
+  </p>
+  
+  <input type="text" id="username" placeholder="Enter Username">
+  <input type="password" id="password" placeholder="Enter Password">
+  <button onclick="checkLogin()">Login</button>
+  
+  <p id="errorMsg" style="color:red; display:none; margin-top:10px;">
+    ❌ Invalid username or password
+  </p>
+</div>
+
+  
+  <!-- 📚 App (hidden until login) -->
+  <div id="appContainer" class="container">
+     <h2 id="welcomeMsg"></h2>
+	  <!-- 🔝 Status Bar -->
+  <div id="statusBar"></div>
+    
+	
+	
+	
+	
+
+
+
+
+<h2 style="
+  background: linear-gradient(135deg, #2f3640, #718093);
+  color: #f5f6fa;
+  padding: 12px 22px;
+  border-radius: 14px;
+  display: inline-block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.25);
+  letter-spacing: 0.8px;
+  text-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+">
+ 💡🎓 <span style="color:#f5f6fa;">Pritesh Vocabulary Match Game</span> 📚 🎯
+</h2>
+
+
+
+    <!-- File Selector -->
+    <div style="margin-top: 15px;">
+      <input type="file" id="excelFile" />
+    </div>
+
+    <!-- Category Select + Load Button -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+      <label><strong>Select Category:</strong></label>
+      <select ng-model="selectedCategory" ng-options="c for c in categories">
+        <option value="">-- All Categories --</option>
+      </select>
+      <button ng-click="loadVocabulary()">
+  <i class="fas fa-download" style="margin-right: 8px;"></i>
+  Load Vocabulary
+</button>
+
+    </div>
+	
+<!-- Styled Toggle Switch -->
+<div class="toggle-container">
+  <label class="switch">
+    <input type="checkbox" ng-model="learningMode">
+    <span class="slider round"></span>
+  </label>
+  <strong style="margin-left: 12px;">Learning Mode</strong>
+</div>
+
+<div ng-show="!learningMode">
+
+  <form ng-if="quizData.length > 0">
+    <table>
+      <tr>
+        <th>Word Meaning</th>
+        <th>Choose Word</th>
+        <th>Result</th>
+      </tr>
+      <tr ng-repeat="item in quizData">
+        <td>{{item.meaning}}</td>
+        <td>
+          <select ng-model="item.userAnswer">
+            <option value="">-- Select --</option>
+            <option ng-repeat="option in item.options" value="{{option}}">
+              {{option}}
+            </option>
+          </select>
+        </td>
+        <td ng-bind-html="trustAsHtml(item.result)"></td>
+      </tr>
+    </table>
+    <br>
+<p ng-if="!allAnswersSelected()" style="color: #e74c3c;">⚠️ Please select answers for all items before submitting.</p>
+
+	<button type="button" 
+        ng-click="submitAnswers()" 
+        ng-disabled="!allAnswersSelected()" 
+        title="Please answer all questions to enable submit">
+		<i class="fas fa-check" style="margin-right: 8px;"></i>
+  Submit
+</button>
+
+   <button ng-if="showNext" ng-click="loadNext()">
+  <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
+  Next
+</button>
+
+  </form>
+  
+ 
+
+
+  <!-- Score box & final report (inside same div) -->
+  <div ng-if="totalAttempted > 0 && !finalReportVisible" class="score-box">
+    
+  <div ng-if="totalAttempted > 0 && !finalReportVisible" class="score-box">
+    <p><strong>Score:</strong> You have answered {{totalCorrect}} out of {{totalAttempted}} correctly.
+      ({{ ((totalCorrect / totalAttempted) * 100).toFixed(1) }}%)</p>
+  </div>
+
+  <div ng-if="finalReportVisible" class="final-report">
+    <h3>Final Report</h3>
+    <p><strong>Total Questions Attempted:</strong> {{ totalAttempted }}</p>
+    <p><strong>Total Correct Answers:</strong> {{ totalCorrect }}</p>
+    <p><strong>Accuracy:</strong> {{ ((totalCorrect / totalAttempted) * 100).toFixed(1) }}%</p>
+    <p ng-if="(totalCorrect / totalAttempted) >= 0.8">🎉✨ Well done! You're mastering this! 🥳 </p>
+    <p ng-if="(totalCorrect / totalAttempted) < 0.8">💪 Keep practicing! You're getting there!</p>
+  </div>
+
+
+  </div>
+
+  <div ng-if="finalReportVisible" class="final-report">
+    ...
+  </div>
+</div>
+
+
+<div class="learning-table-container" ng-show="learningMode">
+  <h3>📖 Full Vocabulary List</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Word</th>
+        <th>Meaning</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="item in filteredLearningData()">
+        <td>{{ item.word }}</td>
+        <td style="text-align: left;">{{ item.word_meaning }}</td>
+        <td>{{ item.category }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+   </div>
+   
+   
+ <!-- 🔑 Login Script -->
+ <script>
+  async function sha256(str) {
+    const buf = new TextEncoder().encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buf);
+    return Array.from(new Uint8Array(hashBuffer))
+                .map(b => b.toString(16).padStart(2, "0"))
+                .join("");
+  }
+
+  function formatDate(date) {
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yyyy = date.getFullYear();
+
+    let hh = date.getHours();
+    const ampm = hh >= 12 ? "PM" : "AM";
+    hh = hh % 12 || 12; // convert 0 → 12
+
+    const min = String(date.getMinutes()).padStart(2, "0");
+
+    return `${dd}/${mm}/${yyyy} ${hh}:${min} ${ampm}`;
+  }
+
+  async function checkLogin() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+
+    const validUser = "pritesh";
+    const validHash = "77dda8b9dc3d0ad59bac37da4839841a06aa2b6db4c6d432444d1397f7806394";
+    // SHA-256("pritesh@vocab8412")
+
+    const passHash = await sha256(pass);
+    console.log("Entered user:", user);
+    console.log("Entered pass hash:", passHash);
+    console.log("Expected hash:", validHash);
+
+    if (user === validUser && passHash === validHash) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("appContainer").style.display = "block";
+      
+      const loginTime = new Date();
+      document.getElementById("statusBar").style.display = "block";
+
+      function updateStatusBar() {
+        const now = new Date();
+        const diff = Math.floor((now - loginTime) / 1000); // in seconds
+        const hrs = String(Math.floor(diff / 3600)).padStart(2, "0");
+        const mins = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+        const secs = String(diff % 60).padStart(2, "0");
+
+        document.getElementById("statusBar").innerText =
+          `Login User: ${user.toUpperCase()}\n` +
+          `Login Time: ${formatDate(loginTime)}\n` +
+          `Session: ${hrs}:${mins}:${secs}`;
+      }
+
+      updateStatusBar();
+      setInterval(updateStatusBar, 1000);
+
+    } else {
+      document.getElementById("errorMsg").style.display = "block";
+    }
+  }
+</script>
+
+
+ <script>
+ 
+   document.addEventListener("DOMContentLoaded", function () {
+    const bgImages = [
+      'pritesh.jpg',
+	  'pritesh1.jpg',
+      'pritesh2.jpg',
+      'pritesh3.jpg',
+      'pritesh4.jpg',
+	  'pritesh5.jpg',
+	  'pritesh6.jpg',
+	  'pritesh7.jpg',
+	  'pritesh8.jpg',
+      'pritesh9.jpg'
+    ];
+
+    const randomIndex = Math.floor(Math.random() * bgImages.length);
+    const chosenImage = bgImages[randomIndex];
+
+    document.body.style.backgroundImage = `url('${chosenImage}')`;
+  });
+  
+  
+    const app = angular.module("vocabApp", ['ngSanitize']);
+
+
+    app.controller("MainController", function ($scope, $sce) {
+	
+      $scope.fullData = [];
+      $scope.quizData = [];
+      $scope.categories = [];
+      $scope.selectedCategory = "";
+      $scope.usedWords = [];
+      $scope.showNext = false;
+      $scope.totalCorrect = 0;
+      $scope.totalAttempted = 0;
+      $scope.quizRoundsCompleted = 0;
+      $scope.finalReportVisible = false;
+
+	$scope.learningMode = false;
+	
+      document.getElementById("excelFile").addEventListener("change", handleFile, false);
+
+      function handleFile(e) {
+        const reader = new FileReader();
+        const file = e.target.files[0];
+
+        reader.onload = function (e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+
+          const sheet = workbook.Sheets[workbook.SheetNames[0]];
+          const rawData = XLSX.utils.sheet_to_json(sheet);
+
+          const jsonData = rawData.map(item => ({
+            ...item,
+            category: (item.category || item.Category || "").trim()
+          }));
+
+          $scope.$apply(function () {
+            $scope.fullData = jsonData;
+            $scope.categories = [...new Set(jsonData.map(item => item.category).filter(c => c))];
+          });
+        };
+
+        reader.readAsArrayBuffer(file);
+      }
+
+      $scope.loadVocabulary = function () {
+        let data = $scope.fullData;
+        if ($scope.selectedCategory) {
+          data = data.filter(item => item.category.trim() === $scope.selectedCategory.trim());
+        }
+
+        const remaining = data.filter(item => !$scope.usedWords.includes(item.word));
+        if (remaining.length === 0) {
+          $scope.finalReportVisible = true;
+          alert("You have completed all vocabulary sets!");
+          return;
+        }
+
+        if (remaining.length < 5) {
+          alert(`Only ${remaining.length} word(s) left. Final round!`);
+        }
+
+        const shuffled = remaining.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 5);
+
+        const correctWords = selected.map(item => item.word);
+        const jumbledOptions = [...correctWords].sort(() => 0.5 - Math.random());
+
+        $scope.quizData = selected.map((item) => {
+          return {
+            meaning: item.word_meaning,
+            correctAnswer: item.word,
+            options: jumbledOptions.concat("I don't know"),
+            userAnswer: "",
+            result: ""
+          };
+        });
+
+        $scope.usedWords.push(...correctWords);
+        $scope.showNext = false;
+      };
+
+      $scope.submitAnswers = function () {
+        let allCorrect = true;
+        let roundCorrect = 0;
+
+        $scope.quizData.forEach((item) => {
+          if (item.userAnswer === item.correctAnswer) {
+              item.result = '<i class="fas fa-check-circle" style="color:green;"></i> Correct!';
+            roundCorrect++;
+          } else if (item.userAnswer === "I don't know") {
+            item.result = '<i class="fas fa-meh" style="color:#e67e22;"></i> It\'s okay!';
+            allCorrect = false;
+          } else {
+            item.result = '<i class="fas fa-times-circle" style="color:red;"></i> Incorrect!';
+            allCorrect = false;
+          }
+        });
+
+        $scope.totalCorrect += roundCorrect;
+        $scope.totalAttempted += $scope.quizData.length;
+        $scope.quizRoundsCompleted++;
+        $scope.showNext = allCorrect;
+
+        let data = $scope.fullData;
+        if ($scope.selectedCategory) {
+          data = data.filter(item => item.category.trim() === $scope.selectedCategory.trim());
+        }
+        const remaining = data.filter(item => !$scope.usedWords.includes(item.word));
+        if (remaining.length === 0) {
+          $scope.finalReportVisible = true;
+        }
+      };
+
+      $scope.loadNext = function () {
+        $scope.finalReportVisible = false;
+        $scope.loadVocabulary();
+      };
+	  
+	  $scope.allAnswersSelected = function () {
+		  return $scope.quizData.every(item => item.userAnswer && item.userAnswer !== "");
+		};
+
+	  $scope.trustAsHtml = function (html) {
+		return $sce.trustAsHtml(html);
+	  };
+	  
+	  	$scope.filteredLearningData = function () {
+  if (!$scope.selectedCategory) return $scope.fullData;
+  return $scope.fullData.filter(item =>
+    item.category.trim() === $scope.selectedCategory.trim()
+  );
+};
+    });
+	
+
+
+  </script>
+
+</body>
+
+</html>
